@@ -1,0 +1,110 @@
+<html>
+<head>
+<link href="gp.css" rel="stylesheet" type="text/css"/>
+<style>
+script{font-size: 30px;}
+.highlightme{background-color:yellow;}
+</style>
+</head>
+<style>
+html {
+    height: 10%;
+    font-family: Arial, Helvetica, sans-serif;
+    background-image:url(search.jpg);
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+}
+input[type=text], input[type=text] {
+    width: 70%;
+    padding: 15px;
+    margin: 5px 0 20px 0;
+    border: black;
+    background: #f1f1f1;
+  }
+</style>
+<form action="" method="get" align="center">
+<h1>FIND ANYTHING</h1>
+<table align="center">
+<tr><td> </td><td><br><br></td></tr><input type="file" id="txtfiletoread" />
+<tr><td><b>Search-pattern:<br><br></td>
+ <td><b><input type="text" name="word" id="2"><br><br></td></tr>
+  <tr><td></td><td><b><input type="button" value="Search" id="sub" onclick="fun()"><br><br></td></tr>
+  <tr><td><b>The Searched Pattern is at index:</td><td><input type="text" id="3"></td></tr>
+   <div id="filecontents"></div>
+</table>
+</form>
+<script>
+window.onload = function () { 
+ //Check the support for the File API support 
+ if (window.File && window.FileReader && window.FileList && window.Blob) {
+    var fileSelected = document.getElementById('txtfiletoread');
+    fileSelected.addEventListener('change', function (e) { 
+         //Set the extension for the file 
+         var fileExtension = /text.*/; 
+         //Get the file object 
+         var fileTobeRead = fileSelected.files[0];
+        //Check of the extension match 
+         if (fileTobeRead.type.match(fileExtension)) { 
+             //Initialize the FileReader object to read the 2file 
+             var fileReader = new FileReader(); 
+             fileReader.onload = function (e) { 
+                 var fileContents = document.getElementById('filecontents'); 
+                 fileContents.innerText = fileReader.result; 
+             } 
+             fileReader.readAsText(fileTobeRead); 
+         } 
+         else { 
+             alert("Please select text file"); 
+         }
+ 
+    }, false);
+} 
+ else { 
+     alert("Files are not supported"); 
+ } 
+ }
+function fun(){
+var s=document.getElementById('filecontents').innerText;
+var p=document.getElementById("2").value;
+var n = s.length;
+var m = p.length;
+var f = [-1];
+var k=0;
+
+  for (var j = 1; j <= m-1; j++) {  
+    k = f[j-1];   
+    while (k!=-1 && p[j-1] != p[k]) {
+      k = f[k];
+    }
+    f[j] = k+1;
+  }
+var l=0;
+  var b=0;
+var c=-1;
+  while (l < n) {
+    while (b != -1 && s[l] != p[b]) {
+      b = f[b];
+    }
+    if (b == m-1) {
+      c=((l-m)+1);
+break;
+    } else {
+      l++;
+      b++;
+    }
+  }
+document.getElementById("3").value=c;
+   var i = document.getElementById("filecontents");
+  var t = i.innerHTML;
+  if (c >= 0) { 
+   t = t.substring(0,c) + "<span class='highlightme'>" + t.substring(c,c+m) + "</span>" + t.substring(c + m);
+   i.innerHTML = t;
+  }
+
+  
+  
+}
+</script>
+</body>
+</html> 
